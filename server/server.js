@@ -44,7 +44,7 @@ app.get('/todos/:id',(req,res)=>{
 });
 
 app.listen(port,()=>{
-  console.log('starting on port ',port);
+  console.log('starting on port +',port);
 });
 // var newTodo = new Todo(
 //   {text:'  Edit      this video'}
