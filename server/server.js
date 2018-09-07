@@ -15,6 +15,7 @@ const {mongoose} =require('./db/mongoose');
 const {Todo}=require('./models/todo');
 const {User}=require('./models/user');
 const {ObjectID}=require('mongodb');
+var {authenticate}=require('./middleware/authenticate');
 var app=express();
 
 const port=process.env.PORT || 3000;
@@ -95,16 +96,25 @@ app.post('/users',(req,res)=>{
 var body=_.pick(req.body,['email','password']);
 var user=new User(body);
 
-user.save().then((user)=>{
-  return user.generateAuthToken();
+user.save().then(( )=>{
+  var token=user.generateAuthToken();
+  console.log(token);
+  return token;
   //res.send(user);
 }).then((token)=>{
   res.header('x-auth',token).send(user);
+  console.log("header x-auth",token);
 }).catch((e)=>{
   res.status(400).send(e);
 })
 }
 
+
+);
+
+
+app.get('/users/me',authenticate,(req,res)=>{
+res.send(req.user);}
 );
 app.listen(port,()=>{
   console.log('starting on port +',port);
